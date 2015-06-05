@@ -35,6 +35,9 @@ This plugin is described in English, browse down to the end of the readme to fin
 
 == Changelog ==
 
+= 1.9.4 =
+* wp-admin blank page bug fix
+
 = 1.9.3 =
 * G+ platform bug, typo: _iub_cs_activate_inline vs _iub_cs_activate-inline
 

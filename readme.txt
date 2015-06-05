@@ -47,6 +47,12 @@ Under "Installation/Other Notes" you will find instructions in both English and 
 
 == Changelog ==
 
+= 1.9.7 =
+* minor bugfix 
+
+= 1.9.6 =
+* bugfix: custom banner now allowed
+
 = 1.9.5 =
 * no refresh page needed to activate scripts inside IUB tags.
 

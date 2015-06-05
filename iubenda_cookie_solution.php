@@ -4,7 +4,7 @@
 	Plugin URI: https://www.iubenda.com
 	Description: Iubenda Cookie Solution permette di gestire tutti gli aspetti della cookie law su WP.
 	Author: iubenda
-	Version: 1.9.5
+	Version: 1.9.7
 	Author URI: https://www.iubenda.com
 	*/
 
@@ -57,20 +57,39 @@
 		if(!consentGiven()){
 			$str.="\n
 				<script>
-					var lang, cId,sId;
-					_iub.csConfiguration = {
-						cookiePolicyId: _iub.csConfiguration.cookiePolicyId,
-						siteId: _iub.csConfiguration.siteId,
-						lang: _iub.csConfiguration.lang,
-						callback: {
-							onConsentGiven: function(){
-								jQuery('noscript._no_script_iub').each(function(a,b){
-									var el = jQuery(b);
-									el.after(el.html());
-								});							
-							}
+					(function(){
+					
+						function extendObj() {
+						  for (var i = 1; i < arguments.length; i++)
+						  for (var key in arguments[i])
+						  if (arguments[i].hasOwnProperty(key))
+						  arguments[0][key] = arguments[i][key];
+						  return arguments[0];
 						}
-					};
+
+
+						var userCallback, extend;
+						
+						if(typeof(_iub.csConfiguration.callback) !== 'undefined'){
+							userCallback = _iub.csConfiguration.callback.onConsentGiven || function(){};
+						}else{
+							userCallback = function(){};
+						}
+		
+						extend = {
+						  callback: {
+						    onConsentGiven: function(){
+							  userCallback();
+							  jQuery('noscript._no_script_iub').each(function(a,b){
+								var el = jQuery(b);
+								el.after(el.html());
+							  });
+							}
+						  }
+					    };
+					    			
+						extendObj(_iub.csConfiguration, extend);
+					})();
 				</script>";
 		}
 		

@@ -45,10 +45,15 @@ Under "Installation/Other Notes" you will find instructions in both English and 
       `<!--IUB_COOKIE_POLICY_START-->
       <!--IUB_COOKIE_POLICY_END-->`
 
+== Screenshots ==
+
+1. This screen shot shows the default banner on top of our test site testkada4.altervista.org/cookie-test/example2.html
+2. When clicking on the cookie policy link, the user gets a view of the entire cookie policy, where they ultimately can give their consent
+
 == Changelog ==
 
 = 1.9.7 =
-* minor bugfix 
+* minor bugfix
 
 = 1.9.6 =
 * bugfix: custom banner now allowed
@@ -109,12 +114,12 @@ In case of continued browsing, the preferences of your users for the use of cook
 
 At the moment the automatic blocking of the YouTube video player and social widgets are done only if these scripts are located after the function wp_head(). The solution is the first version. Test it and contact us to report any errors.
 
-# Bug reports
+== Bug reports ==
 
 * The best way you can help us is by providing as much information as possible, including the use of wp_debug https://codex.wordpress.org/Debugging_in_WordPress.
 * We will be very happy to receive feedback here: http://gsfn.us/t/4qpks
 
-# Istruzioni in italiano
+== Istruzioni in italiano ==
 
 Per esempio in un plugin Facebook dovrai fare come segue:
 
@@ -148,7 +153,7 @@ In caso di proseguimento della navigazione, le preferenze dei tuoi utenti circa 
 
 Al momento il blocco automatico dei video player di YouTube e dei widget sociali avviene solo se questi script si trovano dopo la funzione wp_head(). La soluzione è alla prima versione. Testatela e contattateci per segnalare eventuali errori.
 
-# Segnalazioni di bug
+== Segnalazioni di bug ==
 
 * Il modo migliore per aiutarci è quello di fornire quante più informazioni possibili, compreso l'uso di wp_debug https://codex.wordpress.org/Debugging_in_WordPress.
 * Saremo molto contenti di ricevere feedback qui: http://gsfn.us/t/4qpks

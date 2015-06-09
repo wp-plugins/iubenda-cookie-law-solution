@@ -8,7 +8,7 @@ Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A plugin for the Iubenda Cookie Law Solution & allows to block the most common widgets to comply with Cookie Laws, particularly fit for Italy.
+A plugin that works with the iubenda Cookie Law Solution that shows a cookie banner & allows blocking prior to consent, particularly fit for Italy.
 
 == Description ==
 
@@ -113,6 +113,8 @@ In case of continued browsing, the preferences of your users for the use of cook
 == Further notes ==
 
 At the moment the automatic blocking of the YouTube video player and social widgets are done only if these scripts are located after the function wp_head(). The solution is the first version. Test it and contact us to report any errors.
+
+Header image for this plugin page [graciously provided by this person](http://www.sketchappsources.com/free-source/1012-minimal-lines-device-icons-sketch-freebie-resource.html).
 
 == Bug reports ==
 

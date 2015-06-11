@@ -4,7 +4,7 @@
 	Plugin URI: https://www.iubenda.com
 	Description: Iubenda Cookie Solution permette di gestire tutti gli aspetti della cookie law su WP.
 	Author: iubenda
-	Version: 1.9.7
+	Version: 1.9.8
 	Author URI: https://www.iubenda.com
 	*/
 
@@ -12,6 +12,7 @@
 		include_once 'simple_html_dom.php';
 	}
 
+	DEFINE('DEBUG', 0);
 	DEFINE('VOICE_MENU', 'Iubenda Cookie Solution');
 	DEFINE('URL_MENU', str_replace(' ', '_', VOICE_MENU));
 	DEFINE('IUB_REGEX_PATTERN', '/<!--IUB_COOKIE_POLICY_START-->(.*)<!--IUB_COOKIE_POLICY_END-->/sU');
@@ -54,7 +55,7 @@
 		$iub_code = get_option('iub_code');
 		$str = html_entity_decode(stripslashes($iub_code));
 		
-		if(!consentGiven()){
+		if(!consentGiven() && !DEBUG){
 			$str.="\n
 				<script>
 					(function(){
@@ -122,7 +123,7 @@
 		$js = '';
 
 		foreach($elements as $e){
-
+	
 			switch($e->tag){
 				case 'script':
 					$s = $e->innertext;
@@ -130,6 +131,7 @@
 				break;
 
 				default:
+					
 					$js.= '<noscript class="_no_script_iub">';
 					$js.= $e->outertext;
 					$js.= '</noscript>';
@@ -167,20 +169,24 @@
 			'apis.google.com/js/plusone.js',
 			'apis.google.com/js/platform.js',
 			'connect.facebook.net',
-			'www.youtube.com/iframe_api'
+			'www.youtube.com/iframe_api',
+			'pagead2.googlesyndication.com/pagead/show_ads.js'
 		);
 
 		$auto_iframe_tags = array(
 			'youtube.com',
 			'platform.twitter.com',
 			'www.facebook.com/plugins/like.php',
-			'apis.google.com'
+			'apis.google.com',
+			'www.google.com/maps/embed/'
 		);
 
 
-		if(consentGiven()){
+
+		if(consentGiven() && !DEBUG){
 			return $output;
 		}
+
 
 		/* Replace all the comments with js/html encoded code */
 		preg_match_all(IUB_REGEX_PATTERN, $output, $scripts);
@@ -224,13 +230,13 @@
 			}
 	
 			/* Auto match iframe and replace */
-			$iframes = $html->find("iframe");
+			$iframes = $html->find("iframe");			
 			if(is_array($iframes)){
 				$count = count($iframes);
 				for($j=0; $j<$count; $j++){
 					$i = $iframes[$j];
 					$src = $i->src;
-					if (strpos_array($src, $auto_iframe_tags) !== false){
+					if (strpos_array($src, $auto_iframe_tags) !== false){					
 						$new_src = "data:text/html;base64,PGh0bWw+PGJvZHk+U3VwcHJlc3NlZDwvYm9keT48L2h0bWw+";
 						$class = $i->class;
 						$i->suppressedsrc = $src;
@@ -252,9 +258,7 @@
 
 
 	function iub_func($atts, $content = "") {
-		/* Shortcode function */
-		$html = str_get_html($content, $lowercase=true, $forceTagsClosed=true, $stripRN=false);
-		return create_tags($html);
+		return '<!--IUB_COOKIE_POLICY_START-->'.do_shortcode($content).'<!--IUB_COOKIE_POLICY_END-->';
 	}
 
 

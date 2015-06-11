@@ -72,7 +72,7 @@ function file_get_html($url, $use_include_path = false, $context=null, $offset =
 	$contents = file_get_contents($url, $use_include_path, $context, $offset);
 	// Paperg - use our own mechanism for getting the contents as we want to control the timeout.
 	//$contents = retrieve_url_contents($url);
-	if (empty($contents) || strlen($contents) > 60000)
+	if (empty($contents))
 	{
 		return false;
 	}
@@ -85,7 +85,7 @@ function file_get_html($url, $use_include_path = false, $context=null, $offset =
 function str_get_html($str, $lowercase=true, $forceTagsClosed=true, $stripRN=true)
 {
 	$dom = new simple_html_dom(null, $lowercase, $forceTagsClosed, $stripRN);
-	if (empty($str) || strlen($str) > 60000)
+	if (empty($str))
 	{
 		$dom->clear();
 		return false;
@@ -1174,7 +1174,7 @@ class simple_html_dom
 		$this->root->_[HDOM_INFO_BEGIN] = -1;
 		$this->root->nodetype = HDOM_TYPE_ROOT;
 		$this->parent = $this->root;
-		if ($this->size>0) $this->char = $this->doc[0];
+		//if ($this->size>0) $this->char = $this->doc[0];
 	}
 
 	// parse html content

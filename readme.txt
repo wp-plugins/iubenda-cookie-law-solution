@@ -52,6 +52,12 @@ Under "Installation/Other Notes" you will find instructions in both English and 
 
 == Changelog ==
 
+= 1.9.9 =
+* Bugs page 60000 chars 
+
+= 1.9.8 =
+* Added Google Maps & Google Adsense + better shortcode handling
+
 = 1.9.7 =
 * minor bugfix
 

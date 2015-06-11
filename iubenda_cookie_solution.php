@@ -4,7 +4,7 @@
 	Plugin URI: https://www.iubenda.com
 	Description: Iubenda Cookie Solution permette di gestire tutti gli aspetti della cookie law su WP.
 	Author: iubenda
-	Version: 1.9.8
+	Version: 1.9.9
 	Author URI: https://www.iubenda.com
 	*/
 

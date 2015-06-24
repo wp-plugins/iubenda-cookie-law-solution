@@ -52,6 +52,9 @@ Under "Installation/Other Notes" you will find instructions in both English and 
 
 == Changelog ==
 
+= 1.9.15 =
+* include bug + google maps
+
 = 1.9.14 =
 * Autoconvert iframe vimeo + facebook likebox 
 

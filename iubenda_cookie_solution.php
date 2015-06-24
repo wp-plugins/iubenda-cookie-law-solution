@@ -4,50 +4,21 @@
 	Plugin URI: https://www.iubenda.com
 	Description: Iubenda Cookie Solution permette di gestire tutti gli aspetti della cookie law su WP.
 	Author: iubenda
-	Version: 1.9.9
+	Version: 1.9.14
 	Author URI: https://www.iubenda.com
 	*/
 
 	if(!function_exists('file_get_html')){
-		include_once 'simple_html_dom.php';
+		include_once 'iubenda-cookie-class/simple_html_dom.php';
 	}
+	
+	include_once 'iubenda-cookie-class/iubenda.class.php';
 
 	DEFINE('DEBUG', 0);
 	DEFINE('VOICE_MENU', 'Iubenda Cookie Solution');
 	DEFINE('URL_MENU', str_replace(' ', '_', VOICE_MENU));
 	DEFINE('IUB_REGEX_PATTERN', '/<!--IUB_COOKIE_POLICY_START-->(.*)<!--IUB_COOKIE_POLICY_END-->/sU');
-
-
-	/***************************************
-	*
-	*  Add Iubenda JS script to the header
-	*
-	****************************************/
-
-	function strpos_array($haystack, $needle){
-		if(is_array($needle)){
-	       foreach($needle as $need){
-	       	if(strpos($haystack, $need) !== false){
-	        	return true;
-	        }
-	       }
-	     }else{
-	     	if(strpos($haystack, $need) !== false) {
-	        	return true;
-	        }
-	     }
-	  	return false;
-	}
-
-
-	function consentGiven(){
-		foreach($_COOKIE as $key => $value){
-			if(strpos_array($key, array('_iub_cs-s', '_iub_cs'))){
-				return true;
-			}
-		}
-	}
-
+	DEFINE('IUB_NO_PARSE_GET_PARAM', 'iub_no_parse');
 
 
 	function iub_header(){
@@ -55,7 +26,7 @@
 		$iub_code = get_option('iub_code');
 		$str = html_entity_decode(stripslashes($iub_code));
 		
-		if(!consentGiven() && !DEBUG){
+		if(!Page::consent_given() && !DEBUG || $_GET[IUB_NO_PARSE_GET_PARAM]){
 			$str.="\n
 				<script>
 					(function(){
@@ -99,50 +70,6 @@
 
 	add_action('wp_head', 'iub_header', 99);
 
-	/***********************************
-	*
-	*  Encode all the javascript/html content fetched from this comments:
-	*
-	*	<!--IUB_COOKIE_POLICY_START-->
-	* 	<script>..</script>
-	*	<!--IUB_COOKIE_POLICY_END-->
-	*
-	*	AND
-	*
-	*	[iub-cookie-solution]
-	*
-	*	code
-	*
-	*	[/iub-cookie-solution]
-	*
-	************************************/
-
-	function create_tags($html){
-
-		$elements = $html->find("*");
-		$js = '';
-
-		foreach($elements as $e){
-	
-			switch($e->tag){
-				case 'script':
-					$s = $e->innertext;
-					$js.= '<script type="text/plain" class="_iub_cs_activate">'.$s.'</script>';
-				break;
-
-				default:
-					
-					$js.= '<noscript class="_no_script_iub">';
-					$js.= $e->outertext;
-					$js.= '</noscript>';
-				break;
-			}
-
-		}
-
-		return $js;
-	}
-
 
 	function __shutdown(){
 	    $final = '';
@@ -164,97 +91,16 @@
 
 	function __final_output($output){
 
-		$auto_script_tags = array(
-			'platform.twitter.com/widgets.js',
-			'apis.google.com/js/plusone.js',
-			'apis.google.com/js/platform.js',
-			'connect.facebook.net',
-			'www.youtube.com/iframe_api',
-			'pagead2.googlesyndication.com/pagead/show_ads.js'
-		);
-
-		$auto_iframe_tags = array(
-			'youtube.com',
-			'platform.twitter.com',
-			'www.facebook.com/plugins/like.php',
-			'apis.google.com',
-			'www.google.com/maps/embed/'
-		);
-
-
-
-		if(consentGiven() && !DEBUG){
+		if(Page::consent_given() && !DEBUG || $_GET[IUB_NO_PARSE_GET_PARAM]){
 			return $output;
 		}
-
-
-		/* Replace all the comments with js/html encoded code */
-		preg_match_all(IUB_REGEX_PATTERN, $output, $scripts);
-		if(is_array($scripts[1])){
-			$count = count($scripts[1]);
-			$js_scripts = array();
-			for($j=0; $j<$count; $j++){
-				$html = str_get_html($scripts[1][$j], $lowercase=true, $forceTagsClosed=true, $stripRN=false);
-				$js_scripts[] = create_tags($html);
-			}
-
-		    if(is_array($scripts[1]) && is_array($js_scripts)){
-		    	if(count($scripts[1]) >= 1 && count($js_scripts) >= 1){
-					$output = strtr($output, array_combine($scripts[1], $js_scripts));
-		    	}
-		    }
-		}
-
-		$html = str_get_html($output, $lowercase=true, $forceTagsClosed=true, $stripRN=false);
-
-		if(is_object($html)){
-			/* Auto match script and replace */
-			$scripts = $html->find("script");
-			if(is_array($scripts)){
-				$count = count($scripts);
-				for($j=0; $j<$count; $j++){
-					$s = $scripts[$j];
-					if (strpos_array($s->innertext, $auto_script_tags) !== false) {
-						$class = $s->class;
-						$s->class = $class . ' _iub_cs_activate';
-						$s->type = 'text/plain';
-					}else{
-						$src = $s->src;
-						if (strpos_array($src, $auto_script_tags) !== false) {
-							$class = $s->class;
-							$s->class = $class . ' _iub_cs_activate-inline';
-							$s->type = 'text/plain';
-						}
-					}
-				}
-			}
-	
-			/* Auto match iframe and replace */
-			$iframes = $html->find("iframe");			
-			if(is_array($iframes)){
-				$count = count($iframes);
-				for($j=0; $j<$count; $j++){
-					$i = $iframes[$j];
-					$src = $i->src;
-					if (strpos_array($src, $auto_iframe_tags) !== false){					
-						$new_src = "data:text/html;base64,PGh0bWw+PGJvZHk+U3VwcHJlc3NlZDwvYm9keT48L2h0bWw+";
-						$class = $i->class;
-						$i->suppressedsrc = $src;
-						$i->src = $new_src;
-						$i->class = $class . ' _iub_cs_activate';
-					}
-				}
-			}
 		
-			return $html;
-			
-		}else{
-			return $output;
-		}
-
+		$page = new Page($output);
+		$page->parse();
+		return $page->get_converted_page();
 	}
 
-	add_filter('final_output', '__final_output', $output);
+	add_filter('final_output', '__final_output');
 
 
 	function iub_func($atts, $content = "") {
@@ -307,9 +153,7 @@
 		    <p>
 		    Per informazioni ed istruzioni su questo plugin, visita questa guida:<br>
 			<a href="https://www.iubenda.com/it/help/posts/810">https://www.iubenda.com/it/help/posts/810</a>
-
-</p>
-
+			</p>
 		</div>';
  	}
 

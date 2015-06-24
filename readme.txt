@@ -28,18 +28,18 @@ Under "Installation/Other Notes" you will find instructions in both English and 
 **NOTE: This plugin is a very early beta and could lead to problems.** We encourage you to actively let us know about the problems here: http://gsfn.us/t/4qpks
 
 - **Installation via WP.org**: search in your WordPress plugin admin panel for "Iubenda Cookie Solution", install it;
-- Once the plugin is installed and activated, go to the Admin Panel (Settings > Iubenda Cookie Solution) where you will be asked to paste the code into tht field that gets generated from your Iubenda account dashboard when you activate the cookie law kit for your privacy policy. For more information on how to activate the cookie law kit, see this article: https://www.iubenda.com/it/help/posts/680
-- At this point the plugin will begin to show the banner on which displays your cookie policy (link) to users who visit the site for the first time. No need for other configurations.
-- Furthermore, the plugin automatically recognizes and blocks cookies that get installed via the YouTube video player and social widgets - such as the Facebook Like Box - on your site.
+- Once the plugin is installed and activated, go to the Admin Panel (Settings > Iubenda Cookie Solution) where you will be asked to paste the code into tht field that gets generated from your Iubenda account dashboard when you activate the cookie law kit for your privacy policy. For more information on how to activate the cookie law kit, see this article: https://www.iubenda.com/it/help/posts/680;
+- At this point the plugin will begin to show the banner on which displays your cookie policy (link) to users who visit the site for the first time. No need for other configurations;
+- Furthermore, the plugin automatically recognizes and blocks cookies that get installed via the YouTube video player and social widgets - such as the Facebook Like Box - on your site. **Important note** the scripts for Facebook, Twitter, G+, and YouTube iframe only get blocked automatically when generated from the server side (therefore processed by PHP via WordPress). Scripts that are added to the page via Javascript after page load cannot be blocked automatically;
 - The other scripts that install cookies for which the automatic block isn't yet available can and should be "wrapped" using these comments:
 
       `<!--IUB_COOKIE_POLICY_START-->
       <!--IUB_COOKIE_POLICY_END-->`
 
 - **Installazione automatica**: installa da WordPres.org cercando "Iubenda Cookie Solution";
-- Una volta installato ed attivato il plugin, accedi al pannello Admin (Impostazioni > Iubenda Cookie Solution) dove ti verrà chiesto di incollare in un campo il codice che iubenda genera quando attivi il kit cookie law sulla tua privacy policy. Per ulteriori informazioni su come attivare il kit cookie law, consulta questo articolo: https://www.iubenda.com/it/help/posts/680
-- A questo punto il plugin inizierà a mostrare il banner in cui è richiamata la tua cookie policy agli utenti che visitano il sito per la prima volta senza la necessità di altre configurazioni.
-- In più, il plugin riconoscerà e bloccherà in automatico i cookie installati da tutti i video player di YouTube e dai widget sociali – come il Facebook Like Box – presenti sul tuo sito.
+- Una volta installato ed attivato il plugin, accedi al pannello Admin (Impostazioni > Iubenda Cookie Solution) dove ti verrà chiesto di incollare in un campo il codice che iubenda genera quando attivi il kit cookie law sulla tua privacy policy. Per ulteriori informazioni su come attivare il kit cookie law, consulta questo articolo: https://www.iubenda.com/it/help/posts/680;
+- A questo punto il plugin inizierà a mostrare il banner in cui è richiamata la tua cookie policy agli utenti che visitano il sito per la prima volta senza la necessità di altre configurazioni;
+- In più, il plugin riconoscerà e bloccherà in automatico i cookie installati da tutti i video player di YouTube e dai widget sociali – come il Facebook Like Box – presenti sul tuo sito. **Nota importante**: il nostro plugin wordpress blocca in modo automatico tutti gli script Facebook, Twitter, G+, iframe youtube che sono generati lato server (quindi restituiti via PHP da wordpress). Script che vengono inseriti nella pagina dopo il loading della pagina tramite Javascript non sono e non possono essere bloccati in modo automatico;
 - Gli altri script per i quali non è ancora disponibile il blocco automatico – e che installano cookie che richiedono il blocco prima del consenso – vanno “avvolti” utilizzando questi commenti:
 
       `<!--IUB_COOKIE_POLICY_START-->
@@ -51,6 +51,21 @@ Under "Installation/Other Notes" you will find instructions in both English and 
 2. When clicking on the cookie policy link, the user gets a view of the entire cookie policy, where they ultimately can give their consent
 
 == Changelog ==
+
+= 1.9.14 =
+* Autoconvert iframe vimeo + facebook likebox 
+
+= 1.9.13 =
+* Now the plugin use iubenda.class.php + fix bug on it.
+
+= 1.9.12 =
+* Add iub__no_parse get parameter to skip parsing page
+
+= 1.9.11 =
+* Add iub__no_parse get parameter to skip parsing page
+
+= 1.9.10 =
+* Another adsense script blocked, another fix on simple html dom
 
 = 1.9.9 =
 * Bugs page 60000 chars 

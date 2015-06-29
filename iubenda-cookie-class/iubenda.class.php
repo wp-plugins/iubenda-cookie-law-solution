@@ -22,7 +22,8 @@
 			'apis.google.com',
 			'www.google.com/maps/embed/',
 			'player.vimeo.com/video',
-			'maps.google.it/maps'
+			'maps.google.it/maps',
+			'www.google.com/maps/embed'
 		);
 		
 		public $iub_comments_detected = array();
@@ -85,6 +86,16 @@
 		}
 			
 		/*
+		Static, detect bot & crawler
+		*/
+		static function bot_detected() {
+		  if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/bot|crawl|slurp|spider/i', $_SERVER['HTTP_USER_AGENT'])) {
+		    return true;
+		  }
+		    return false;
+		}
+
+		/*
 		Static, utility function: Return true if the user has already given consent on the page
 		*/
 		static function consent_given(){
@@ -132,9 +143,9 @@
 						break;
 						
 						case 'iframe':
-							$new_src = "data:text/html;base64,PGh0bWw+PGJvZHk+U3VwcHJlc3NlZDwvYm9keT48L2h0bWw+";
+							$new_src = "//cdn.iubenda.com/cookie_solution/empty.html";
 							$class = $e->class;
-							$e->suppressedsrc = $e->$src;
+							$e->suppressedsrc = $e->src;
 							$e->src = $new_src;
 							$e->class = $class . ' _iub_cs_activate';						
 							$js.= $e->outertext;
@@ -221,7 +232,7 @@
 						$src = $i->src;
 						$this->iframe_detected[] = $src;
 						if (Page::strpos_array($src, $this->auto_iframe_tags) !== false){					
-							$new_src = "data:text/html;base64,PGh0bWw+PGJvZHk+U3VwcHJlc3NlZDwvYm9keT48L2h0bWw+";
+							$new_src = "//cdn.iubenda.com/cookie_solution/empty.html";
 							$class = $i->class;
 							$i->suppressedsrc = $src;
 							$i->src = $new_src;

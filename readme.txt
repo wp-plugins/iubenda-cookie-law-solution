@@ -52,6 +52,18 @@ Under "Installation/Other Notes" you will find instructions in both English and 
 
 == Changelog ==
 
+= 1.9.19 =
+* new iframe src according to the new doc
+
+= 1.9.18 =
+* bug on all iframe, suppressedsrc is not null anymore
+
+= 1.9.17 =
+* added another url of google maps embed
+
+= 1.9.16 =
+* skip parsing page if bot/crawler + added checkbox to autoparse (or not) the page if the user have already given the consent
+
 = 1.9.15 =
 * include bug + google maps
 
@@ -99,7 +111,7 @@ Under "Installation/Other Notes" you will find instructions in both English and 
 
 = 1.9 =
 * Improved parsing without regex
-* No parsing if the user has already given the consent
+* No parsing if the user have already given the consent
 
 = 1.0 =
 * First plugin version.

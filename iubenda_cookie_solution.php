@@ -4,7 +4,7 @@
 	Plugin URI: https://www.iubenda.com
 	Description: Iubenda Cookie Solution permette di gestire tutti gli aspetti della cookie law su WP.
 	Author: iubenda
-	Version: 1.9.15
+	Version: 1.9.19
 	Author URI: https://www.iubenda.com
 	*/
 
@@ -26,7 +26,7 @@
 		$iub_code = get_option('iub_code');
 		$str = html_entity_decode(stripslashes($iub_code));
 		
-		if(!Page::consent_given() && !DEBUG || $_GET[IUB_NO_PARSE_GET_PARAM]){
+		if(!Page::consent_given() && !DEBUG  && !Page::bot_detected() || $_GET[IUB_NO_PARSE_GET_PARAM]){
 			$str.="\n
 				<script>
 					(function(){
@@ -91,7 +91,7 @@
 
 	function __final_output($output){
 
-		if(Page::consent_given() && !DEBUG || $_GET[IUB_NO_PARSE_GET_PARAM]){
+		if(Page::consent_given() && !DEBUG || $_GET[IUB_NO_PARSE_GET_PARAM] || Page::bot_detected()){
 			return $output;
 		}
 		
@@ -125,15 +125,29 @@
 
  	function iub_admin(){
 
+		if (get_option('skip_parsing') === false){
+		    add_option('skip_parsing', 'on');
+		}
+
  		/* Handling POST DATA and FETCHING from DB */
 	 	if($_POST['iub_update_form'] == 1) {
 
 	        $iub_code = htmlentities($_POST['iub_code']);
+	        $skip_parsing = htmlentities($_POST['skip_parsing']);
+		        
+	        update_option('skip_parsing', $skip_parsing, 'on');
 	        update_option('iub_code', $iub_code);
 	        echo '<div class="updated"><p><strong>Opzioni salvate</strong></p></div>';
-	    } else {
-	        $iub_code = get_option('iub_code');
-	    }
+	    } 
+    
+    	$iub_code = get_option('iub_code');
+        $skip_parsing = get_option('skip_parsing');
+        				        
+        $checked = '';
+        if($skip_parsing){
+        	$checked = 'checked="true"';
+        }
+	        
 
 	echo '
 		<div class="wrap">
@@ -144,11 +158,16 @@
 	    			Codice iubenda<br>
 	     			 <textarea name="iub_code" cols="44" rows="13">'.stripslashes($iub_code).'</textarea>
 	     		</p>
+	     		<p>
+					<input type="checkbox" name="skip_parsing" '.$checked.'>
+	     			Salta il parsing della pagina se l\'utente ha già dato il consenso (migliora le prestazioni, altamente consigliato).
+	     		</p>
 
 		        <p class="submit">
 	 		       <input type="hidden" name="iub_update_form" value="1">
 	 		       <input type="submit" name="Submit" value="Update">
 	        	</p>
+	        	
 		    </form>
 		    <p>
 		    Per informazioni ed istruzioni su questo plugin, visita questa guida:<br>

@@ -215,7 +215,7 @@
 						}
 					}
 				}
-				$this->content_page = $html;
+				$this->content_page = $html->__toString();
 			}
 		}
 
@@ -241,7 +241,7 @@
 						}
 					}
 				}
-				$this->content_page = $html;
+				$this->content_page = $html->__toString();
 			}
 		}
 		
